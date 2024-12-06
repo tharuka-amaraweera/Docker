@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  mongoDB:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+  productCatalog:
+    build:
+      context: ../SupplyMaster/ProductCateloug
+      dockerfile: Dockerfile
+    image: productcatalog
+    container_name: productcatalog
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongoDB
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongoDB
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=${MONGODB_USERNAME}
+      - SPRING_DATA_MONGODB_PASSWORD=${MONGODB_PASSWORD}
+
+# up (create the containers) -> docker-compose up
+# down (remove the containers) -> docker-compose down
